@@ -2,6 +2,8 @@ package com.data.structures.algorithms.geek.arrays;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class CustomArrays {
 
@@ -282,6 +284,22 @@ public class CustomArrays {
         return res;
     }
 
+    public static List<List<String>> groupAnagram(String[] strs) {
+        HashMap<String, List<String>> res = new HashMap<>();
+        for (int i = 0; i < strs.length; i++) {
+            char[] chars = new char[26];
+            for (char c: strs[i].toCharArray()) {
+                chars[c - 'a']++;
+            }
+            String keyStr = String.valueOf(chars);
+            System.out.println(keyStr);
+            if (!res.containsKey(keyStr))
+                res.put(keyStr, new ArrayList<>());
+            res.get(keyStr).add(strs[i]);
+        }
+        return new ArrayList<>(res.values());
+    }
+
     public static void main(String[] args) {
         System.out.println(largestIndex(new int[]{}));
         System.out.println(secondLargestIndex(new int[]{1, 2, 4, 3}));
@@ -302,5 +320,6 @@ public class CustomArrays {
         System.out.println(maxEvenOddArray(new int[] {10, 12, 16, 14}));
         System.out.println(maxEvenOddArray(new int[]  {7, 10, 12, 14}));
         System.out.println(maxEvenOddArray(new int[] {5, 10, 20, 6, 3, 8}));
+        System.out.println(groupAnagram(new String[] {"eat","tea","tan","ate","nat","bat"}));
     }
 }

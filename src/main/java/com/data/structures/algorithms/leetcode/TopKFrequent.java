@@ -1,9 +1,6 @@
 package com.data.structures.algorithms.leetcode;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TopKFrequent {
 
@@ -12,29 +9,25 @@ public class TopKFrequent {
             return nums;
         }
         int[] result = new int[k];
-        int largest = 0;
+        List<Integer>[] bucket = new List[nums.length+1];
         Map<Integer, Integer> map = new HashMap<>();
-        for (int i=0; i < nums.length; i++) {
-            if (!map.containsKey(nums[i])) {
-                map.put(nums[i], 1);
-            } else {
-                map.put(nums[i], map.get(nums[i]) + 1);
-                if (largest < map.get(nums[i]))
-                    largest = map.get(nums[i]);
-            }
+        for (int n: nums) {
+            map.put(n, map.getOrDefault(n, 0) + 1);
         }
-        int i = 0;
-        for (int j = largest; j > 0; j--) {
-            if (i == k) break;
-            for (Map.Entry<Integer, Integer> entrySet: map.entrySet()){
-                if (j == entrySet.getValue()) {
-                    result[i++] = entrySet.getKey();
-                    break;
+        for (Map.Entry<Integer, Integer> entrySet: map.entrySet()) {
+            if (bucket[entrySet.getValue()] == null) bucket[entrySet.getValue()] = new ArrayList<>();
+            bucket[entrySet.getValue()].add(entrySet.getKey());
+        }
+        int index = 0;
+        for(int i = bucket.length - 1; i >=0 && k > 0; i--) {
+            if (bucket[i] != null) {
+                for (int n: bucket[i]) {
+                    if (k == 0) break;
+                    result[index++] = n;
+                    k--;
                 }
-
             }
         }
-
         return result;
     }
 
