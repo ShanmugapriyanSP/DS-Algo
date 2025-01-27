@@ -1,10 +1,9 @@
 package com.data.structures.algorithms.leetcode;
 
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.util.*;
 
 class TreeNode {
       int val;
@@ -96,6 +95,94 @@ public class Tree {
         return res;
     }
 
+    public static Boolean isBST(TreeNode node, int left, int right) {
+         if (node == null) return true;
+         if (node.val > left || node.val < right) return false;
+         return isBST(node.left, left, node.val) && isBST(node.right, node.right.val, node.val);
+    }
+
+    public static boolean isValidBST(TreeNode root) {
+        if (root == null) return true;
+        return isBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    public static int kthSmallest(TreeNode root, int k) {
+        if (root == null) return 0;
+        Stack<TreeNode> stack = new Stack();
+        TreeNode current = root;
+        int counter = 0;
+        while(current != null || !stack.isEmpty()) {
+            while(current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+            current = stack.pop();
+            counter++;
+            if (counter == k) return current.val;
+            current = current.right;
+        }
+        return 0;
+    }
+
+    public static int maxSum(TreeNode root) {
+        if (root == null) return 0;
+        if (root.left == null || root.right == null) return root.val;
+        return root.val + maxPathSum(root.left) + maxPathSum(root.right);
+    }
+    public static int maxPathSum(TreeNode root) {
+         if (root == null) return 0;
+        int res = maxSum(root);
+
+        TreeNode backup = root;
+        while(root != null && root.left != null) {
+            res = Math.max(res, maxSum(root.left) + maxSum(root.right));
+            root = root.left;
+        }
+        while(backup != null && backup.right != null) {
+            res = Math.max(res, maxSum(backup.left) + maxSum(backup.right));
+            backup = backup.right;
+        }
+
+        return res;
+    }
+    public static String serialize(TreeNode root) {
+        if (root == null) return "";
+        String res = "";
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            res += node.val + ",";
+            if(node.left != null) {
+                queue.add(node.left);
+            } else {
+                res += "N,";
+            }
+            if(node.right != null) {
+                queue.add(node.right);
+            } else {
+                res += "N,";
+            }
+        }
+        System.out.println(res.substring(0, res.length()-1));
+        return res.substring(0, res.length()-1);
+    }
+
+    public static TreeNode build(String[] arr, int idx) {
+        if (idx >= arr.length || arr[idx].equals("N")) return null;
+        TreeNode node = new TreeNode(Integer.valueOf(arr[idx]));
+        node.left = build(arr, idx + 1);
+        node.right = build(arr, idx + 2);
+        return node;
+    }
+
+    // Decodes your encoded data to tree.
+    public static TreeNode deserialize(String data) {
+        if (data == "") return null;
+        String[] arr = data.split(",");
+        return build(arr, 0);
+    }
+
     public static void main(String[] args) {
         TreeNode root = new TreeNode(-8);
         root.left = new TreeNode(-6);
@@ -117,8 +204,22 @@ public class Tree {
         root = initialiseTree(new Integer[] {1,2,3,4,5}, 0);
         printTree(root, "");
         System.out.println(levelOrder(root));
+
+        root = initialiseTree(new Integer[] {5,4,6,null,null,3,7}, 0);
+        printTree(root, "");
+        System.out.println(isValidBST(root));
+
+        root = initialiseTree(new Integer[] {3,1,4,null,2}, 0);
+        printTree(root, "");
+        System.out.println(kthSmallest(root, 2));
+
+        root = initialiseTree(new Integer[] {1,2,3}, 0);
+        printTree(root, "");
+        System.out.println(maxPathSum(root));
+
+        root = initialiseTree(new Integer[] {1,2,3,null,null,4,5}, 0);
+        printTree(root, "");
+        root = deserialize(serialize(root));
+        printTree(root, "");
     }
-
-
-
 }
