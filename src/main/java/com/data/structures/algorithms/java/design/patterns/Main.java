@@ -1,9 +1,21 @@
 package com.data.structures.algorithms.java.design.patterns;
 
+import com.data.structures.algorithms.java.design.patterns.behavioral.chainofresponsibility.Currency;
+import com.data.structures.algorithms.java.design.patterns.behavioral.chainofresponsibility.FiftyDollarDispenser;
+import com.data.structures.algorithms.java.design.patterns.behavioral.chainofresponsibility.TenDollarDispenser;
+import com.data.structures.algorithms.java.design.patterns.behavioral.chainofresponsibility.TwentyDollarDispenser;
+import com.data.structures.algorithms.java.design.patterns.behavioral.command.*;
 import com.data.structures.algorithms.java.design.patterns.behavioral.mediator.ChatMediator;
 import com.data.structures.algorithms.java.design.patterns.behavioral.mediator.ChatMediatorImpl;
 import com.data.structures.algorithms.java.design.patterns.behavioral.mediator.User;
 import com.data.structures.algorithms.java.design.patterns.behavioral.mediator.UserImpl;
+import com.data.structures.algorithms.java.design.patterns.behavioral.observer.Observer;
+import com.data.structures.algorithms.java.design.patterns.behavioral.observer.Topic;
+import com.data.structures.algorithms.java.design.patterns.behavioral.observer.TopicSubscriber;
+import com.data.structures.algorithms.java.design.patterns.behavioral.strategy.CreditCard;
+import com.data.structures.algorithms.java.design.patterns.behavioral.strategy.Item;
+import com.data.structures.algorithms.java.design.patterns.behavioral.strategy.PayPalProvider;
+import com.data.structures.algorithms.java.design.patterns.behavioral.strategy.ShoppingCart;
 import com.data.structures.algorithms.java.design.patterns.behavioral.template.GlassHouse;
 import com.data.structures.algorithms.java.design.patterns.behavioral.template.HouseTemplate;
 import com.data.structures.algorithms.java.design.patterns.behavioral.template.WoodenHouse;
@@ -163,6 +175,59 @@ public class Main {
 
         shawn.sendMessage("Bye All!!!");
 
+        // Chain of responsibility
+        FiftyDollarDispenser atmDispenser = new FiftyDollarDispenser();
+        TwentyDollarDispenser twentyDollarDispenser = new TwentyDollarDispenser();
+        TenDollarDispenser tenDollarDispenser = new TenDollarDispenser();
+
+        atmDispenser.setNextChain(twentyDollarDispenser);
+        twentyDollarDispenser.setNextChain(tenDollarDispenser);
+
+        atmDispenser.dispense(new Currency(180));
+
+        // Observer
+
+        Topic topic = new Topic();
+
+        Observer observer1 = new TopicSubscriber("obj1");
+        Observer observer2 = new TopicSubscriber("obj2");
+        Observer observer3 = new TopicSubscriber("obj3");
+
+
+        topic.registerObserver(observer1);
+        topic.registerObserver(observer2);
+        topic.registerObserver(observer3);
+
+        observer1.setSubject(topic);
+        observer2.setSubject(topic);
+        observer3.setSubject(topic);
+
+        observer1.update();
+
+        topic.postMessage("First message in the topic...");
+
+        // Strategy eg. Collections.sort(), Arrays.sort()
+        Item item1 = new Item("joystick", 120);
+        Item item2 = new Item("keyboard", 60);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.addItem(item1);
+        shoppingCart.addItem(item2);
+
+        shoppingCart.pay(new CreditCard("1111 1111 1111 1111", "12/28", "111"));
+
+        shoppingCart.pay(new PayPalProvider("shan@test.com", "password"));
+
+        // Command eg. Runnable
+        FileSystemReceiver fs = FileSystemReceiverUtil.getFileSystemReceiver();
+
+        Command command = new OpenFileCommand(fs);
+
+        FileInvoker fileInvoker = new FileInvoker(command);
+        fileInvoker.execute();
+
+        fileInvoker = new FileInvoker(new CloseFileCommand(fs));
+        fileInvoker.execute();
 
     }
 

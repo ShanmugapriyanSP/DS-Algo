@@ -1,8 +1,6 @@
 package com.data.structures.algorithms.leetcode;
 
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.*;
 
 class TreeNode {
