@@ -5,13 +5,22 @@ import com.data.structures.algorithms.java.design.patterns.behavioral.chainofres
 import com.data.structures.algorithms.java.design.patterns.behavioral.chainofresponsibility.TenDollarDispenser;
 import com.data.structures.algorithms.java.design.patterns.behavioral.chainofresponsibility.TwentyDollarDispenser;
 import com.data.structures.algorithms.java.design.patterns.behavioral.command.*;
+import com.data.structures.algorithms.java.design.patterns.behavioral.iterator.Channel;
+import com.data.structures.algorithms.java.design.patterns.behavioral.iterator.ChannelCollectionImpl;
+import com.data.structures.algorithms.java.design.patterns.behavioral.iterator.ChannelIterator;
+import com.data.structures.algorithms.java.design.patterns.behavioral.iterator.ChannelType;
 import com.data.structures.algorithms.java.design.patterns.behavioral.mediator.ChatMediator;
 import com.data.structures.algorithms.java.design.patterns.behavioral.mediator.ChatMediatorImpl;
 import com.data.structures.algorithms.java.design.patterns.behavioral.mediator.User;
 import com.data.structures.algorithms.java.design.patterns.behavioral.mediator.UserImpl;
+import com.data.structures.algorithms.java.design.patterns.behavioral.memento.CareTaker;
+import com.data.structures.algorithms.java.design.patterns.behavioral.memento.TextEditor;
 import com.data.structures.algorithms.java.design.patterns.behavioral.observer.Observer;
 import com.data.structures.algorithms.java.design.patterns.behavioral.observer.Topic;
 import com.data.structures.algorithms.java.design.patterns.behavioral.observer.TopicSubscriber;
+import com.data.structures.algorithms.java.design.patterns.behavioral.state.TVContext;
+import com.data.structures.algorithms.java.design.patterns.behavioral.state.TVStartState;
+import com.data.structures.algorithms.java.design.patterns.behavioral.state.TVStopState;
 import com.data.structures.algorithms.java.design.patterns.behavioral.strategy.CreditCard;
 import com.data.structures.algorithms.java.design.patterns.behavioral.strategy.Item;
 import com.data.structures.algorithms.java.design.patterns.behavioral.strategy.PayPalProvider;
@@ -19,6 +28,7 @@ import com.data.structures.algorithms.java.design.patterns.behavioral.strategy.S
 import com.data.structures.algorithms.java.design.patterns.behavioral.template.GlassHouse;
 import com.data.structures.algorithms.java.design.patterns.behavioral.template.HouseTemplate;
 import com.data.structures.algorithms.java.design.patterns.behavioral.template.WoodenHouse;
+import com.data.structures.algorithms.java.design.patterns.behavioral.visitor.*;
 import com.data.structures.algorithms.java.design.patterns.creational.abstractfactory.WindowsFactory;
 import com.data.structures.algorithms.java.design.patterns.creational.builder.BuilderPattern;
 import com.data.structures.algorithms.java.design.patterns.creational.factory.Gui;
@@ -229,6 +239,68 @@ public class Main {
         fileInvoker = new FileInvoker(new CloseFileCommand(fs));
         fileInvoker.execute();
 
+        // State
+        TVContext tvContext = new TVContext();
+        TVStartState tvStartState = new TVStartState();
+        TVStopState tvStopState = new TVStopState();
+
+        tvContext.setState(tvStartState);
+        tvContext.doAction();
+
+        tvContext.setState(tvStopState);
+        tvContext.doAction();
+
+        // Visitor
+        ItemElement[] shoppingCartItems = new ItemElement[] {new Book(20, "123"),
+                new Fruit(21, 1, "Banana"), new Fruit(25, 2, "Apple"), new Book(50, "456")};
+
+        ShoppingCartVisitor shoppingCartVisitor = new ShoppingCartVisitorImpl();
+
+        /* calculate prices */
+        int sum = 0;
+        for (ItemElement itemElement: shoppingCartItems) {
+            sum += itemElement.accept(shoppingCartVisitor);
+        }
+        print(sum);
+
+        // Iterator
+
+        Channel english = new Channel(100.1, ChannelType.ENGLISH);
+        Channel french = new Channel(100.7, ChannelType.FRENCH);
+        Channel hindi = new Channel(101.7, ChannelType.HINDI);
+        Channel all = new Channel(103.8, ChannelType.ALL);
+        Channel english2 = new Channel(105.2, ChannelType.ENGLISH);
+
+        ChannelCollectionImpl channelCollection = new ChannelCollectionImpl();
+        channelCollection.addChannel(english);
+        channelCollection.addChannel(french);
+        channelCollection.addChannel(hindi);
+        channelCollection.addChannel(all);
+        channelCollection.addChannel(english2);
+
+        ChannelIterator iterator = channelCollection.iterator(ChannelType.ENGLISH);
+
+        while(iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+
+        // Memento
+        TextEditor textEditor = new TextEditor();
+        CareTaker careTaker = new CareTaker();
+
+        textEditor.write("First sentence");
+        careTaker.saveState(textEditor);
+
+        textEditor.write("Second sentence");
+        careTaker.saveState(textEditor);
+
+        textEditor.write("Third Sentence");
+
+        careTaker.undo(textEditor);
+        System.out.println(textEditor.getContent());
+
+        careTaker.undo(textEditor);
+        System.out.println(textEditor.getContent());
     }
 
     private static void print(Object obj) {

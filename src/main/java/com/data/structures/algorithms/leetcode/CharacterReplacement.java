@@ -33,7 +33,36 @@ public class CharacterReplacement {
         }
         return largest;
     }
+
+
+    public static int characterReplacement1(String s, int k) {
+        if (s.length() <=1) return s.length();
+        int longest = 1;
+        int[] frequency = new int[26];
+
+        int l = 0, r = 0;
+        while(r < s.length()) {
+            frequency[s.charAt(r) - 'A'] += 1;
+            int windowLength = r - l + 1;
+            int maxValue = getMaxFrequency(frequency);
+            if (windowLength - maxValue <= k) {
+                longest = Math.max(longest, windowLength);
+            } else {
+                frequency[s.charAt(l) - 'A'] -= 1;
+                l++;
+            }
+            r++;
+        }
+        return longest;
+    }
+
+    public static int getMaxFrequency(int[] arr) {
+        int max = 0;
+        for (int a : arr)
+            max = Math.max(a, max);
+        return max;
+    }
     public static void main(String[] args) {
-        System.out.println(characterReplacement("BAAA", 0));
+        System.out.println(characterReplacement1("AABABBA", 1));
     }
 }
