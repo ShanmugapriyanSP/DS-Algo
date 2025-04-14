@@ -13,7 +13,8 @@ public class FiftyDollarDispenser implements DispenserChain{
             int count = currency.amount() / 50;
             System.out.println("Dispensing " + count + " 50$ notes");
             int remaining = currency.amount() % 50;
-            if (remaining > 0) this.chain.dispense(new Currency(remaining));        } else {
+            if (remaining > 0) this.chain.dispense(new Currency(remaining));
+        } else {
             this.chain.dispense(currency);
         }
     }

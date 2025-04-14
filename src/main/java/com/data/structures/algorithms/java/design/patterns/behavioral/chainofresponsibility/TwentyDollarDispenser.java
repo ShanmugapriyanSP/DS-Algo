@@ -12,7 +12,8 @@ public class TwentyDollarDispenser implements DispenserChain{
             int count = currency.amount() / 20;
             System.out.println("Dispensing " + count + " 20$ notes");
             int remaining = currency.amount() % 20;
-            if (remaining > 0) this.chain.dispense(new Currency(remaining));        } else {
+            if (remaining > 0) this.chain.dispense(new Currency(remaining));
+        } else {
             this.chain.dispense(currency);
         }
     }

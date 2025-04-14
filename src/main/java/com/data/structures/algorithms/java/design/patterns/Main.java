@@ -55,6 +55,7 @@ import com.data.structures.algorithms.java.design.patterns.structural.decorator.
 import com.data.structures.algorithms.java.design.patterns.structural.decorator.SubtitledStream;
 import com.data.structures.algorithms.java.design.patterns.structural.decorator.VideoStream;
 import com.data.structures.algorithms.java.design.patterns.structural.facade.*;
+import com.data.structures.algorithms.java.design.patterns.structural.flyweight.DrawingClient;
 import com.data.structures.algorithms.java.design.patterns.structural.proxy.CommandExecutor;
 import com.data.structures.algorithms.java.design.patterns.structural.proxy.CommandProxyExecutor;
 
