@@ -452,6 +452,23 @@ public class StreamsPractice {
                         .sorted(Comparator.comparingInt(String::length).thenComparing(Function.identity()))
                         .collect(Collectors.toList())
         );
+
+        // alternative
+        Comparator<String> compareString = (a, b) -> {
+            if (a.length() == b.length()) {
+                return a.compareTo(b);
+            } else {
+                return a.length() > b.length() ? 1 : -1;
+            }
+        };
+        print(
+                words.stream()
+                        .sorted(compareString)
+                        .collect(Collectors.toList())
+        );
+
+        words.forEach(a -> System.out.println(a));
+
     }
 
     public static void print(Object obj){
