@@ -1,7 +1,5 @@
 package com.data.structures.algorithms.leetcode;
 
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class MaxConsecutiveOnes {
 
