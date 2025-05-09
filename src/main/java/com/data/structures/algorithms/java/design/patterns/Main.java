@@ -5,6 +5,8 @@ import com.data.structures.algorithms.java.design.patterns.behavioral.chainofres
 import com.data.structures.algorithms.java.design.patterns.behavioral.chainofresponsibility.TenDollarDispenser;
 import com.data.structures.algorithms.java.design.patterns.behavioral.chainofresponsibility.TwentyDollarDispenser;
 import com.data.structures.algorithms.java.design.patterns.behavioral.command.*;
+import com.data.structures.algorithms.java.design.patterns.behavioral.interpreter.Context;
+import com.data.structures.algorithms.java.design.patterns.behavioral.interpreter.Interpreter;
 import com.data.structures.algorithms.java.design.patterns.behavioral.iterator.Channel;
 import com.data.structures.algorithms.java.design.patterns.behavioral.iterator.ChannelCollectionImpl;
 import com.data.structures.algorithms.java.design.patterns.behavioral.iterator.ChannelIterator;
@@ -302,6 +304,12 @@ public class Main {
 
         careTaker.undo(textEditor);
         System.out.println(textEditor.getContent());
+
+
+        // Interpreter
+        Context context = new Context();
+        Interpreter interpreter = new Interpreter(context);
+        System.out.println(interpreter.interpret("2 + 3 * 4"));
     }
 
     private static void print(Object obj) {
