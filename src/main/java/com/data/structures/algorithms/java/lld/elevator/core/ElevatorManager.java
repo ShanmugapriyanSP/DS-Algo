@@ -24,7 +24,7 @@ public class ElevatorManager {
     private ElevatorManager() {
         this.elevators = new HashSet<>();
         this.requestConcurrentMap = new ConcurrentHashMap<>();
-        Thread.ofVirtual().start(this::displayStats);
+        Thread.ofPlatform().start(this::displayStats);
     }
 
     public static ElevatorManager getInstance() {
@@ -46,12 +46,20 @@ public class ElevatorManager {
         return instance;
     }
 
+    public void startElevator(Elevator elevator) {
+        new Thread(elevator::run).start();
+    }
+
+    public boolean hasRequests() {
+        return this.requestConcurrentMap.values().stream().anyMatch(capacity -> !capacity.isEmpty());
+    }
+
     public void requestElevator(People people, SimpleEntry<Floor, Floor> pair) {
         logger.info("{} - Source: {}, Destination: {}", people.name(), pair.getKey(), pair.getValue());
         Request request = new Request(people, pair.getKey(), pair.getValue());
         FloorRequestKey floorRequestKey = new FloorRequestKey(pair.getKey(), request.direction());
         requestConcurrentMap.computeIfAbsent(floorRequestKey, key -> new ArrayList<>()).add(request);
-        notifyElevators(floorRequestKey);
+        Thread.ofVirtual().start(() -> this.notifyElevators(floorRequestKey));
     }
 
     public List<Request> receivePeopleByDirection(Floor floor, Direction direction, int capacity) {
@@ -70,10 +78,6 @@ public class ElevatorManager {
         return requests;
     }
 
-    private List<FloorRequestKey> filterRequestByFloor(Floor floor) {
-        return this.requestConcurrentMap.keySet().stream().filter(key -> key.floor().equals(floor)).toList();
-    }
-
     private List<FloorRequestKey> filterRequestByFloorAndDirection(Floor floor, Direction direction) {
         return this.requestConcurrentMap.keySet().stream()
                 .filter(key -> key.floor() == floor && key.direction() == direction).toList();
@@ -88,7 +92,7 @@ public class ElevatorManager {
         for(Elevator elevator: nearestElevators) {
             if (elevator.getCurrentCapacity() > 0) {
                 logger.info("Calling Lift - {}", elevator.getId());
-                elevator.nudge(floorRequestKey.floor());
+                elevator.nudge();
                 totalRequests -= elevator.getCurrentCapacity();
             }
             if (totalRequests <= 0)

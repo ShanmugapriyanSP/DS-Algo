@@ -6,7 +6,6 @@ import com.data.structures.algorithms.java.lld.elevator.models.Floor;
 import com.data.structures.algorithms.java.lld.elevator.models.People;
 import com.github.javafaker.Faker;
 
-import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +17,11 @@ public class ElevatorSystem {
         Faker faker = new Faker();
         ElevatorManager elevatorManager = ElevatorManager.getInstance();
 
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 10; i++) {
             new Elevator(i+1, 25);
         }
         List<People> people = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5000; i++) {
             people.add(new People(faker.name().fullName()));
         }
         for (People p: people) {

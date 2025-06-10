@@ -31,13 +31,14 @@ public class Elevator {
         this.currentFloor = Floor.get(0);
         this.currentRequests = Collections.synchronizedList(new ArrayList<>());
         this.floorQueue = new LinkedBlockingQueue<>();
-        this.isMoving = java.lang.Boolean.FALSE;
+        this.isMoving = Boolean.FALSE;
         this.currentDirection = Direction.UP;
         this.elevatorManager = ElevatorManager.getInstance(this);
+        this.elevatorManager.startElevator(this);
     }
 
-    private void run() {
-        simulateMovementAndPickUpDropPeople();
+    public void run() {
+        processRequests();
     }
 
     public int getId() {
@@ -60,36 +61,44 @@ public class Elevator {
         return this.maxCapacity - this.currentRequests.size();
     }
 
-    public void nudge(Floor floor) {
-        if(floorQueue.offer(floor) && Boolean.FALSE.equals(isMoving)) {
-            Thread.ofVirtual().start(this::simulateMovementAndPickUpDropPeople);
+    public synchronized void nudge() {
+        notifyAll();
+    }
+
+    public synchronized void processRequests() {
+        while(true) {
+            while (this.elevatorManager.hasRequests()) {
+                simulateMovementAndPickUpDropPeople();
+            }
+            try {
+                wait();
+            } catch (InterruptedException e) {
+
+            }
         }
     }
 
     private void simulateMovementAndPickUpDropPeople() {
-        boolean success = false;
-        try {
-             success = lock.tryLock();
-            while (success && !currentRequests.isEmpty() || !floorQueue.isEmpty()) {
-                isMoving = true;
-                simulateMovement(1);
-                this.currentFloor = currentDirection == Direction.UP ? currentFloor.increment() : currentFloor.decrement();
-                dropPeople();
-                pickUpPeople();
-                if (floorQueue.peek() == this.currentFloor) {
-                    floorQueue.poll();
-                }
-                flipDirectionIfRequestInOppositeWay();
-            }
-        } finally {
-            if(success)
-                lock.unlock();
-        }
-        isMoving = false;
+       while (elevatorManager.hasRequests() || !currentRequests.isEmpty()) {
+           isMoving = true;
+           simulateMovement(1);
+           this.currentFloor = currentDirection == Direction.UP ? currentFloor.increment() : currentFloor.decrement();
+           dropPeople();
+           pickUpPeople();
+           flipDirectionIfRequestInOppositeWay();
+       }
+       isMoving = false;
     }
 
     private synchronized void pickUpPeople() {
-        List<Request> requests = this.elevatorManager.receivePeopleByDirection(this.currentFloor, currentDirection, getCurrentCapacity());
+        Direction directionRequest = currentDirection;
+        if (currentFloor.number() == 0) {
+            directionRequest = Direction.UP;
+        } else if (currentFloor.number() == 10) {
+            directionRequest = Direction.DOWN;
+        }
+
+        List<Request> requests = this.elevatorManager.receivePeopleByDirection(this.currentFloor, directionRequest, getCurrentCapacity());
         if (requests.isEmpty())
             return;
 
