@@ -2,6 +2,7 @@ package com.data.structures.algorithms.leetcode;
 
 
 import java.util.Collections;
+import java.util.Stack;
 
 class ListNode {
      int val;
@@ -82,6 +83,44 @@ public class LinkedLists {
 
         return lists[0];
     }
+
+    public static void reorderList2(ListNode head) {
+
+        ListNode fast = head.next;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        ListNode reversed = slow.next;
+        slow.next = null;
+        ListNode prev = null;
+
+        while (reversed != null) {
+            ListNode temp = reversed.next;
+            reversed.next = prev;
+            prev = reversed;
+            reversed = temp;
+        }
+
+        ListNode first = head;
+        ListNode second = prev;
+
+        while(first != null && second != null) {
+            ListNode temp1 = first.next;
+            ListNode temp2 = second.next;
+
+            first.next = second;
+            second.next = temp1;
+
+            first = temp1;
+            second = temp2;
+        }
+
+   }
+
     public static void main(String[] args) {
 //        ListNode head = new ListNode(
 //                1, new ListNode(2, new ListNode(3, new ListNode(4)))
@@ -98,9 +137,12 @@ public class LinkedLists {
 //        Runtime.getRuntime();
         ListNode[] lists = new ListNode[3];
 
-        lists[0] = new ListNode(1, new ListNode(4, new ListNode(5)));
+        lists[0] = new ListNode(1, new ListNode(4, new ListNode(5, new ListNode(8))));
         lists[1] = new ListNode(1, new ListNode(3, new ListNode(4)));
-        lists[0] = new ListNode(2, new ListNode(6));
+//        lists[0] = new ListNode(2, new ListNode(6));
+        reorderList2(lists[0]);
+
+
         ListNode merged = mergeKLists(lists);
         while (merged != null) {
             System.out.print(merged.val + " ");
