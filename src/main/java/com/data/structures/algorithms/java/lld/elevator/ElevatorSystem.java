@@ -20,6 +20,7 @@ public class ElevatorSystem {
         for(int i = 0; i < 10; i++) {
             new Elevator(i+1, 25);
         }
+        elevatorManager.startElevators();
         List<People> people = new ArrayList<>();
         for (int i = 0; i < 5000; i++) {
             people.add(new People(faker.name().fullName()));

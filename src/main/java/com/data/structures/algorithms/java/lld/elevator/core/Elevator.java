@@ -21,7 +21,7 @@ public class Elevator {
     private Floor currentFloor;
     private Direction currentDirection;
     private final BlockingQueue<Floor> floorQueue;
-    private Boolean isMoving;
+    private volatile Boolean isMoving;
     private final List<Request> currentRequests;
     private final ElevatorManager elevatorManager;
 
@@ -34,7 +34,6 @@ public class Elevator {
         this.isMoving = Boolean.FALSE;
         this.currentDirection = Direction.UP;
         this.elevatorManager = ElevatorManager.getInstance(this);
-        this.elevatorManager.startElevator(this);
     }
 
     public void run() {
@@ -62,6 +61,7 @@ public class Elevator {
     }
 
     public synchronized void nudge() {
+        isMoving = true;
         notifyAll();
     }
 

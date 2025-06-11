@@ -24,7 +24,7 @@ public class ElevatorManager {
     private ElevatorManager() {
         this.elevators = new HashSet<>();
         this.requestConcurrentMap = new ConcurrentHashMap<>();
-        Thread.ofPlatform().start(this::displayStats);
+        Thread.ofVirtual().start(this::displayStats);
     }
 
     public static ElevatorManager getInstance() {
@@ -46,8 +46,8 @@ public class ElevatorManager {
         return instance;
     }
 
-    public void startElevator(Elevator elevator) {
-        new Thread(elevator::run).start();
+    public void startElevators() {
+        elevators.forEach(elevator -> new Thread(elevator::run).start());
     }
 
     public boolean hasRequests() {
@@ -59,7 +59,7 @@ public class ElevatorManager {
         Request request = new Request(people, pair.getKey(), pair.getValue());
         FloorRequestKey floorRequestKey = new FloorRequestKey(pair.getKey(), request.direction());
         requestConcurrentMap.computeIfAbsent(floorRequestKey, key -> new ArrayList<>()).add(request);
-        Thread.ofVirtual().start(() -> this.notifyElevators(floorRequestKey));
+        notifyElevators(floorRequestKey);
     }
 
     public List<Request> receivePeopleByDirection(Floor floor, Direction direction, int capacity) {
