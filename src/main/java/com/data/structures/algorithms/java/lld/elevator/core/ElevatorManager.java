@@ -36,14 +36,8 @@ public class ElevatorManager {
         return instance;
     }
 
-    public static ElevatorManager getInstance(Elevator elevator) {
-        if (instance == null) {
-            synchronized (ElevatorManager.class) {
-                instance = new ElevatorManager();
-            }
-        }
-        instance.elevators.add(elevator);
-        return instance;
+    public void register(Elevator elevator) {
+        this.elevators.add(elevator);
     }
 
     public void startElevators() {

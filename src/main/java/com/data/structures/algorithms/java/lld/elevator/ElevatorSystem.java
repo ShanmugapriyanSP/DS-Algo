@@ -18,7 +18,7 @@ public class ElevatorSystem {
         ElevatorManager elevatorManager = ElevatorManager.getInstance();
 
         for(int i = 0; i < 10; i++) {
-            new Elevator(i+1, 25);
+            new Elevator(i+1, 25, elevatorManager);
         }
         elevatorManager.startElevators();
         List<People> people = new ArrayList<>();

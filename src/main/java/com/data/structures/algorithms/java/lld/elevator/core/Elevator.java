@@ -20,20 +20,19 @@ public class Elevator {
     private final int maxCapacity;
     private Floor currentFloor;
     private Direction currentDirection;
-    private final BlockingQueue<Floor> floorQueue;
     private volatile Boolean isMoving;
     private final List<Request> currentRequests;
     private final ElevatorManager elevatorManager;
 
-    public Elevator(int id, int capacity) {
+    public Elevator(int id, int capacity, ElevatorManager elevatorManager) {
         this.id = id;
         this.maxCapacity = capacity;
         this.currentFloor = Floor.get(0);
         this.currentRequests = Collections.synchronizedList(new ArrayList<>());
-        this.floorQueue = new LinkedBlockingQueue<>();
         this.isMoving = Boolean.FALSE;
         this.currentDirection = Direction.UP;
-        this.elevatorManager = ElevatorManager.getInstance(this);
+        this.elevatorManager = elevatorManager;
+        this.elevatorManager.register(this);
     }
 
     public void run() {
@@ -62,7 +61,7 @@ public class Elevator {
 
     public synchronized void nudge() {
         isMoving = true;
-        notifyAll();
+        notify();
     }
 
     public synchronized void processRequests() {
