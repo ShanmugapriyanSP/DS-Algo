@@ -1,9 +1,13 @@
 package com.data.structures.algorithms.leetcode.stacks;
 
+import javax.sound.midi.Soundbank;
+
 public class MinimumInsertionsToBalance {
 
     public static void main(String[] args) {
-        System.out.println(minInsertions("(((()(()((())))(((()())))()())))(((()(()()((()()))"));
+        System.out.println(minInsertions("(()))(()))()())))"));   // 4
+        System.out.println(minInsertions("(((()(()((())))(((()())))()())))(((()(()()((()()))"));  // 31
+        System.out.println(minInsertions("))(()()))()))))))()())()(())()))))()())(()())))()("));  // 16
     }
 
 //    public static int minInsertions(String s) {
@@ -30,32 +34,33 @@ public class MinimumInsertionsToBalance {
 //    }
 
     public static int minInsertions(String s) {
-        int open = 0;
-        int res = 0;
+        int close = 0;
+        int leftOver = 0;
         boolean swap = false;
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == ')') {
-                if (open > 0) {
-                    open--;
+                if (close > 0) {
+                    close--;
                 } else {
                     if (i+1 < s.length() && s.charAt(i+1) == ')') {
-                        res++;
+                        leftOver++;
                         i++;
                     } else {
-                        res += 2;
+                        leftOver += 2;
                     }
                 }
                 swap = true;
             } else {
                 if (swap) {
-                    res += open;
-                    open = 2;
-                    swap = false;
-                } else {
-                    open += 2;
+                    if (close % 2 != 0) {
+                        leftOver++;
+                        close--;
+                        swap = false;
+                    }
                 }
+                close += 2;
             }
         }
-        return res + open;
+        return leftOver + close;
     }
 }
