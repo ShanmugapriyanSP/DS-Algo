@@ -121,6 +121,62 @@ public class LinkedLists {
 
    }
 
+
+   public static void reorderList3(ListNode head) {
+       ListNode slow = head;
+       ListNode fast = head.next;
+
+       while (fast != null && fast.next != null) {
+           fast = fast.next.next;
+           slow = slow.next;
+       }
+       ListNode mid = slow.next;
+       slow.next = null;
+       ListNode second = null;
+       while (mid != null) {
+           ListNode temp = mid.next;
+           mid.next = second;
+           second = mid;
+           mid = temp;
+       }
+       ListNode first = head;
+       while (first != null && second != null) {
+           ListNode temp1 = first.next;
+           ListNode temp2 = second.next;
+           first.next = second;
+           second.next = temp1;
+           first = temp1;
+           second = temp2;
+       }
+
+       while (head != null) {
+           System.out.print(head.val + " ");
+           head = head.next;
+       }
+   }
+
+   public static ListNode removeNthNode(ListNode head, int n) {
+       int i = 0;
+       ListNode first = head;
+       ListNode dummy = new ListNode();
+       dummy.next = head;
+       ListNode second = dummy;
+       while (i <= n) {
+           i++;
+           first = first.next;
+       }
+
+       while (first != null) {
+           second = second.next;
+           first = first.next;
+       }
+       if (second.next != null) {
+           second.next = second.next.next;
+       } else
+           second.next = null;
+       return dummy.next;
+   }
+
     public static void main(String[] args) {
 //        ListNode head = new ListNode(
 //                1, new ListNode(2, new ListNode(3, new ListNode(4)))
@@ -139,14 +195,17 @@ public class LinkedLists {
 
         lists[0] = new ListNode(1, new ListNode(4, new ListNode(5, new ListNode(8))));
         lists[1] = new ListNode(1, new ListNode(3, new ListNode(4)));
+        lists[2] = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
 //        lists[0] = new ListNode(2, new ListNode(6));
-        reorderList2(lists[0]);
+//        reorderList2(lists[0]);
 
+//        reorderList3(lists[0]);
+        removeNthNode(lists[2], 2);
 
-        ListNode merged = mergeKLists(lists);
-        while (merged != null) {
-            System.out.print(merged.val + " ");
-            merged = merged.next;
-        }
+//        ListNode merged = mergeKLists(lists);
+//        while (merged != null) {
+//            System.out.print(merged.val + " ");
+//            merged = merged.next;
+//        }
     }
 }
