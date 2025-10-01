@@ -1,7 +1,7 @@
-package com.data.structures.algorithms.java.lld.elevator.models;
+package com.data.structures.algorithms.java.lld.elevator.v1.models;
 
-import com.data.structures.algorithms.java.lld.elevator.enums.Direction;
-import com.data.structures.algorithms.java.lld.elevator.exception.InvalidRequest;
+import com.data.structures.algorithms.java.lld.elevator.v1.enums.Direction;
+import com.data.structures.algorithms.java.lld.elevator.v1.exception.InvalidRequest;
 
 public record Request(People people, Floor source, Floor destination, Direction direction) {
     public Request(People people, Floor source, Floor destination) {

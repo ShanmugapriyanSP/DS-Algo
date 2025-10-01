@@ -1,4 +1,4 @@
-package com.data.structures.algorithms.java.lld.elevator.models;
+package com.data.structures.algorithms.java.lld.elevator.v1.models;
 
 import java.util.HashMap;
 import java.util.Map;

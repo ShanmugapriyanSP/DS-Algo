@@ -1,19 +1,19 @@
-package com.data.structures.algorithms.java.lld.elevator;
+package com.data.structures.algorithms.java.lld.elevator.v1;
 
-import com.data.structures.algorithms.java.lld.elevator.core.Elevator;
-import com.data.structures.algorithms.java.lld.elevator.core.ElevatorManager;
-import com.data.structures.algorithms.java.lld.elevator.models.Floor;
-import com.data.structures.algorithms.java.lld.elevator.models.People;
+import com.data.structures.algorithms.java.lld.elevator.v1.core.Elevator;
+import com.data.structures.algorithms.java.lld.elevator.v1.core.ElevatorManager;
+import com.data.structures.algorithms.java.lld.elevator.v1.models.Floor;
+import com.data.structures.algorithms.java.lld.elevator.v1.models.People;
 import com.github.javafaker.Faker;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 
 public class ElevatorSystem {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Faker faker = new Faker();
         ElevatorManager elevatorManager = ElevatorManager.getInstance();
 
@@ -25,10 +25,12 @@ public class ElevatorSystem {
         for (int i = 0; i < 5000; i++) {
             people.add(new People(faker.name().fullName()));
         }
+        ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
         for (People p: people) {
-            elevatorManager.requestElevator(p, getRandomFloor());
+            executorService.execute(() -> elevatorManager.requestElevator(p, getRandomFloor()));
         }
-        while (true){}
+        executorService.shutdown();
+        executorService.awaitTermination(1000, TimeUnit.SECONDS);
     }
 
     public static SimpleEntry<Floor, Floor> getRandomFloor() {

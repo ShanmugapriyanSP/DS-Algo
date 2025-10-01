@@ -1,7 +1,7 @@
-package com.data.structures.algorithms.java.lld.elevator.core;
+package com.data.structures.algorithms.java.lld.elevator.v1.core;
 
-import com.data.structures.algorithms.java.lld.elevator.enums.Direction;
-import com.data.structures.algorithms.java.lld.elevator.models.*;
+import com.data.structures.algorithms.java.lld.elevator.v1.enums.Direction;
+import com.data.structures.algorithms.java.lld.elevator.v1.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
