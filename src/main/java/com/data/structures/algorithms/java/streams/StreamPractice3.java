@@ -487,6 +487,14 @@ public class StreamPractice3 {
                         .map(c -> c.name() + "(" + c.population() + ")")
                         .collect(Collectors.joining(" > "))
         );
+        int[] arr = {10,8,0,5,3};
+        print(
+                Arrays.stream(arr)
+                        .boxed()
+                        .sorted(Comparator.reverseOrder())
+                        .mapToInt(Integer::intValue)
+                        .toArray()
+        );
     }
 
     private static <T> void print(List<T> values) {
