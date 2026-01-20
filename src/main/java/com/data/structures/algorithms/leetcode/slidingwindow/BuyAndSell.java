@@ -1,5 +1,7 @@
 package com.data.structures.algorithms.leetcode.slidingwindow;
 
+import java.util.LinkedList;
+
 public class BuyAndSell {
 
     public static void main(String[] args) {
