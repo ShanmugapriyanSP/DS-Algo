@@ -1,4 +1,4 @@
-package com.data.structures.algorithms.sorting;
+package com.data.structures.algorithms.java.sorting;
 
 import com.data.structures.algorithms.utils.Utils;
 
@@ -11,7 +11,6 @@ public class SelectionSort {
             int min_idx = i;
             for (int j = i + 1; j < arr.length; j++) {
                 if (arr[j] < arr[min_idx]) {
-
                     min_idx = j;
                 }
             }

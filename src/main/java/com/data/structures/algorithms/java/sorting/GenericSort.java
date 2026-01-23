@@ -1,4 +1,4 @@
-package com.data.structures.algorithms.sorting;
+package com.data.structures.algorithms.java.sorting;
 
 public class GenericSort {
 

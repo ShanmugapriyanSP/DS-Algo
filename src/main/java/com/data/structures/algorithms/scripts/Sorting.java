@@ -1,6 +1,6 @@
 package com.data.structures.algorithms.scripts;
 
-import com.data.structures.algorithms.sorting.GenericSort;
+import com.data.structures.algorithms.java.sorting.GenericSort;
 
 import java.util.Scanner;
 

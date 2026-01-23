@@ -1,6 +1,4 @@
-package com.data.structures.algorithms.sorting;
-
-import com.data.structures.algorithms.utils.Utils;
+package com.data.structures.algorithms.java.sorting;
 
 public class MergeSort {
 

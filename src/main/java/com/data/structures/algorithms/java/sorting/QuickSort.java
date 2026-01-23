@@ -1,4 +1,4 @@
-package com.data.structures.algorithms.sorting;
+package com.data.structures.algorithms.java.sorting;
 
 import com.data.structures.algorithms.utils.Utils;
 

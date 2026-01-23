@@ -1,4 +1,4 @@
-package com.data.structures.algorithms.sorting;
+package com.data.structures.algorithms.java.sorting;
 
 import java.util.ArrayList;
 import java.util.List;
